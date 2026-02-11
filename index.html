@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guida Sicurezza Alimentare</title>
+    <style>
+        :root {
+            --primary: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --accent: #FF6F00;
+            --bg: #F5F5F5;
+            --card-bg: #FFFFFF;
+            --text: #212121;
+            --text-light: #757575;
+            --border: #E0E0E0;
+            --green: #4CAF50;
+            --green-bg: #E8F5E9;
+            --yellow: #FF9800;
+            --yellow-bg: #FFF3E0;
+            --red: #F44336;
+            --red-bg: #FFEBEE;
+            --blue: #2196F3;
+            --blue-bg: #E3F2FD;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-hover: 0 4px 16px rgba(0,0,0,0.15);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border-radius: 50%;
+            background: white;
+            padding: 4px;
+            margin-bottom: 0.6rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Controls */
+        .controls {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 220px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.7rem 1rem 0.7rem 2.8rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-light);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-light);
+            background: var(--green-bg);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Legend */
+        .legend {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+        }
+
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .legend-dot.green { background: var(--green); }
+        .legend-dot.yellow { background: var(--yellow); }
+        .legend-dot.red { background: var(--red); }
+        .legend-dot.blue { background: var(--blue); }
+
+        /* Stats */
+        .stats {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            padding-left: 0.25rem;
+        }
+
+        /* Table */
+        .table-wrapper {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        thead th {
+            padding: 1rem 0.8rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            border-radius: var(--radius) 0 0 0;
+        }
+
+        thead th:last-child {
+            border-radius: 0 var(--radius) 0 0;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: #F8FFF8;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 0.75rem 0.8rem;
+            font-size: 0.88rem;
+            vertical-align: top;
+        }
+
+        /* Category separator */
+        .category-row td {
+            background: #FAFAFA;
+            padding: 0.6rem 0.8rem;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        /* Food name cell */
+        .food-name {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .food-emoji {
+            font-size: 1.2rem;
+            margin-right: 0.4rem;
+        }
+
+        /* Duration cells */
+        .duration {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .duration.green {
+            background: var(--green-bg);
+            color: #2E7D32;
+        }
+
+        .duration.yellow {
+            background: var(--yellow-bg);
+            color: #E65100;
+        }
+
+        .duration.red {
+            background: var(--red-bg);
+            color: #C62828;
+        }
+
+        .duration.blue {
+            background: var(--blue-bg);
+            color: #1565C0;
+        }
+
+        .duration.gray {
+            background: #F5F5F5;
+            color: #616161;
+        }
+
+        /* Notes */
+        .note {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            max-width: 220px;
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+        }
+
+        .no-results-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Sub-info in cells */
+        .sub-info {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* Fridge warning banner */
+        .fridge-warning {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            border: 2px solid #42A5F5;
+            border-left: 6px solid #1565C0;
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .fridge-warning-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .fridge-warning-text {
+            font-size: 0.9rem;
+            color: #0D47A1;
+            line-height: 1.5;
+        }
+
+        .fridge-warning-text strong {
+            font-size: 0.95rem;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        @media (max-width: 860px) {
+            .fridge-warning { padding: 0.8rem; gap: 0.7rem; }
+            .fridge-warning-icon { font-size: 1.6rem; }
+            .fridge-warning-text { font-size: 0.82rem; }
+        }
+
+        /* Regole d'oro box */
+        .rules-box {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+            border: 2px solid #FFD54F;
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .rules-box summary {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #E65100;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rules-box summary::-webkit-details-marker { display: none; }
+
+        .rules-box summary::after {
+            content: '▸';
+            transition: transform 0.2s;
+            margin-left: auto;
+            font-size: 1.1rem;
+        }
+
+        .rules-box[open] summary::after {
+            transform: rotate(90deg);
+        }
+
+        .rules-list {
+            list-style: none;
+            margin-top: 0.8rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1.5rem;
+        }
+
+        .rules-list li {
+            font-size: 0.88rem;
+            padding: 0.4rem 0;
+            border-bottom: 1px dashed #FFD54F;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.4rem;
+        }
+
+        .rules-list li .rule-icon {
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 860px) {
+            .rules-list { grid-template-columns: 1fr; }
+        }
+
+        /* Badge crudo/cotto/stagionato */
+        .badge {
+            display: inline-block;
+            padding: 0.1rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+
+        .badge-crudo {
+            background: #FFCDD2;
+            color: #B71C1C;
+        }
+
+        .badge-cotto {
+            background: #C8E6C9;
+            color: #1B5E20;
+        }
+
+        .badge-stagionato {
+            background: #FFE0B2;
+            color: #E65100;
+        }
+
+        .badge-secco {
+            background: #D7CCC8;
+            color: #4E342E;
+        }
+
+        /* Danger indicator */
+        .danger-indicator {
+            display: inline-block;
+            margin-left: 0.3rem;
+            font-size: 0.75rem;
+            vertical-align: middle;
+            cursor: help;
+        }
+
+        /* ========== MOBILE: card layout ========== */
+        @media (max-width: 860px) {
+            .header h1 { font-size: 1.4rem; }
+            .header { padding: 1.3rem 1rem; }
+            .container { padding: 0.75rem; }
+            .controls { padding: 0.9rem; flex-direction: column; }
+            .search-box { min-width: 100%; }
+            .filter-buttons { justify-content: center; }
+            .filter-btn { padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+            .legend { padding: 0.7rem; gap: 0.6rem; flex-direction: column; align-items: flex-start; }
+
+            .table-wrapper {
+                background: none;
+                box-shadow: none;
+                overflow: visible;
+            }
+
+            table { min-width: 0; }
+
+            thead { display: none; }
+
+            tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            /* Category header on mobile */
+            tbody tr.category-row {
+                display: block;
+                margin-top: 0.5rem;
+            }
+            tbody tr.category-row td {
+                border-radius: var(--radius);
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            /* Food card on mobile */
+            tbody tr:not(.category-row) {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+                background: var(--card-bg);
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                padding: 0;
+                border-bottom: none;
+                overflow: hidden;
+            }
+
+            tbody tr:not(.category-row):hover {
+                background: var(--card-bg);
+            }
+
+            /* Food name spans full width */
+            tbody tr:not(.category-row) td:nth-child(1) {
+                grid-column: 1 / -1;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                color: white;
+                font-size: 1rem;
+                padding: 0.7rem 1rem;
+                white-space: normal;
+            }
+            tbody tr:not(.category-row) td:nth-child(1) .food-emoji {
+                font-size: 1.3rem;
+            }
+
+            /* Data cells become labeled blocks */
+            tbody tr:not(.category-row) td:nth-child(n+2) {
+                padding: 0.6rem 0.75rem;
+                border-bottom: 1px solid var(--border);
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+            }
+
+            tbody tr:not(.category-row) td:nth-child(n+2)::before {
+                content: attr(data-label);
+                font-size: 0.7rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+                color: var(--text-light);
+                margin-bottom: 0.15rem;
+            }
+
+            /* 2-column grid: frigo chiuso | frigo aperto */
+            tbody tr:not(.category-row) td:nth-child(2) { grid-column: 1; }
+            tbody tr:not(.category-row) td:nth-child(3) { grid-column: 2; }
+            /* temp ambiente | congelatore */
+            tbody tr:not(.category-row) td:nth-child(4) { grid-column: 1; }
+            tbody tr:not(.category-row) td:nth-child(5) { grid-column: 2; }
+            /* note full width */
+            tbody tr:not(.category-row) td:nth-child(6) {
+                grid-column: 1 / -1;
+                border-bottom: none;
+                background: #FAFAFA;
+                max-width: none;
+                font-style: italic;
+            }
+            tbody tr:not(.category-row) td:nth-child(6)::before {
+                font-style: normal;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .header h1 { font-size: 1.15rem; }
+            .filter-btn { padding: 0.35rem 0.55rem; font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="https://res.cloudinary.com/dad6kqoyy/image/upload/v1768844135/LUTE_1_nnovbi.jpg" alt="Logo LUTE" class="header-logo">
+    <h1>🥗 Guida alla Sicurezza Alimentare</h1>
+    <p>Tempi di conservazione consigliati per ogni alimento</p>
+    <p style="margin-top:0.6rem; font-size:0.95rem; opacity:0.95; letter-spacing:0.5px;">A cura di <strong>Nuccio Russo</strong></p>
+</div>
+
+<div class="container">
+
+    <!-- Avviso frigo -->
+    <div class="fridge-warning">
+        <span class="fridge-warning-icon">🚪❄️</span>
+        <div class="fridge-warning-text">
+            <strong>Apri il frigo solo il tempo strettamente necessario.</strong>
+            Ogni apertura provoca uno sbalzo termico di 3–5 °C che accelera il deterioramento di tutti gli alimenti conservati. Organizza prima cosa prendere, poi apri, preleva e richiudi subito.
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Cerca un alimento..." autocomplete="off">
+        </div>
+        <div class="filter-buttons" id="filterButtons">
+            <button class="filter-btn active" data-category="all">Tutti</button>
+            <button class="filter-btn" data-category="latticini">🧀 Latticini</button>
+            <button class="filter-btn" data-category="carne">🥩 Carne</button>
+            <button class="filter-btn" data-category="pesce">🐟 Pesce</button>
+            <button class="filter-btn" data-category="uova">🥚 Uova</button>
+            <button class="filter-btn" data-category="verdure-crude">🥬 Verdure crude</button>
+            <button class="filter-btn" data-category="verdure-cotte">🍲 Verdure/Pietanze cotte</button>
+            <button class="filter-btn" data-category="frutta">🍎 Frutta</button>
+            <button class="filter-btn" data-category="conserve">🥫 Conserve</button>
+            <button class="filter-btn" data-category="pane">🍞 Pane e Forno</button>
+            <button class="filter-btn" data-category="salse">🫙 Salse</button>
+            <button class="filter-btn" data-category="avanzi">🍕 Avanzi</button>
+            <button class="filter-btn" data-category="bevande">🥤 Bevande</button>
+            <button class="filter-btn" data-category="surgelati">🧊 Surgelati</button>
+            <button class="filter-btn" data-category="dispensa">🏺 Dispensa</button>
+        </div>
+    </div>
+
+    <!-- Regole d'oro -->
+    <details class="rules-box" open>
+        <summary>📋 Le 10 Regole d'Oro della Sicurezza Alimentare</summary>
+        <ul class="rules-list">
+            <li><span class="rule-icon">🕐</span> <strong>Regola delle 2 ore:</strong> non lasciare cibi cotti o deperibili fuori dal frigo per più di 2 ore (1 ora se fa caldo).</li>
+            <li><span class="rule-icon">🔄</span> <strong>Mai ricongelare:</strong> un alimento scongelato non va mai ricongelato crudo. Solo se lo cuoci prima.</li>
+            <li><span class="rule-icon">❄️</span> <strong>Scongela in frigo:</strong> mai a temperatura ambiente. In alternativa: microonde o acqua fredda corrente.</li>
+            <li><span class="rule-icon">🌡️</span> <strong>Frigo a 0–4 °C:</strong> controllare spesso la temperatura. Lo sportello è la zona più calda.</li>
+            <li><span class="rule-icon">🔥</span> <strong>Cuoci a 75 °C al cuore:</strong> soprattutto pollo, maiale, hamburger e pesce. Usa un termometro.</li>
+            <li><span class="rule-icon">🧊</span> <strong>Raffredda in fretta:</strong> i cibi cotti vanno raffreddati rapidamente prima di metterli in frigo.</li>
+            <li><span class="rule-icon">🫙</span> <strong>Dalla latta al vetro:</strong> una volta aperto un barattolo di latta, travasare subito in un contenitore di vetro o plastica.</li>
+            <li><span class="rule-icon">🧼</span> <strong>Mani e superfici pulite:</strong> lavare le mani prima e dopo aver toccato cibi crudi, soprattutto carne e pesce.</li>
+            <li><span class="rule-icon">🔀</span> <strong>Evita contaminazione incrociata:</strong> non usare lo stesso tagliere per carne cruda e verdure. Separare nel frigo.</li>
+            <li><span class="rule-icon">👃</span> <strong>Nel dubbio, butta:</strong> se aspetto, odore o consistenza sono sospetti, non rischiare.</li>
+        </ul>
+    </details>
+
+    <!-- Legend -->
+    <div class="legend">
+        <span class="legend-title">Durata:</span>
+        <span class="legend-item"><span class="legend-dot green"></span> Lunga</span>
+        <span class="legend-item"><span class="legend-dot yellow"></span> Media</span>
+        <span class="legend-item"><span class="legend-dot red"></span> Breve</span>
+        <span class="legend-item"><span class="legend-dot blue"></span> Congelatore</span>
+        <span style="color:var(--border);">|</span>
+        <span class="legend-title">Stato:</span>
+        <span class="legend-item"><span class="badge badge-crudo">crudo</span></span>
+        <span class="legend-item"><span class="badge badge-cotto">cotto</span></span>
+        <span class="legend-item"><span class="badge badge-stagionato">stagionato</span></span>
+        <span class="legend-item"><span class="badge badge-secco">secco</span></span>
+        <span style="color:var(--border);">|</span>
+        <span class="legend-item">☠️ = alto rischio</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="stats"></div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+        <table id="foodTable">
+            <thead>
+                <tr>
+                    <th>Alimento</th>
+                    <th>🧊 Frigo (sigillato)</th>
+                    <th>🔓 Frigo (conf. aperta)</th>
+                    <th>🌡️ Temp. ambiente</th>
+                    <th>❄️ Congelatore</th>
+                    <th>📝 Note</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+        <div class="no-results" id="noResults" style="display:none;">
+            <div class="no-results-icon">🔍</div>
+            <p>Nessun alimento trovato. Prova con un altro termine.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>⚠️ I tempi indicati sono orientativi e basati su linee guida generali. Verificare sempre aspetto, odore e consistenza prima del consumo.</p>
+        <p style="margin-top:0.3rem;">Temperatura frigo consigliata: 0–4 °C &nbsp;|&nbsp; Congelatore: −18 °C o meno</p>
+        <p style="margin-top:0.3rem;">💡 <strong>"Sigillato"</strong> = confezione originale chiusa &nbsp;|&nbsp; <strong>"Conf. aperta"</strong> = confezione già aperta, conservata in frigo</p>
+        <p style="margin-top:1.2rem; padding-top:1rem; border-top:2px solid var(--primary-light); font-size:1rem; color:var(--primary-dark);"><strong>A cura di Nuccio Russo</strong></p>
+    </div>
+</div>
+
+<script>
+const foodData = [
+    // === LATTICINI ===
+    {
+        category: "latticini",
+        categoryLabel: "🧀 Latticini",
+        name: "Latte fresco",
+        emoji: "🥛",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "Controllare la scadenza" },
+        frigoOpen: { text: "3–4 giorni", level: "red", sub: "Richiudere bene" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "3 mesi", level: "blue", sub: "Può separarsi" },
+        note: "Conservare nel ripiano centrale, non nello sportello."
+    },
+    {
+        category: "latticini",
+        name: "Latte UHT",
+        emoji: "🥛",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "Mesi" },
+        frigoOpen: { text: "4–5 giorni", level: "yellow", sub: "In frigo dopo apertura" },
+        ambient: { text: "Fino a scadenza", level: "green", sub: "Se chiuso" },
+        freezer: { text: "3 mesi", level: "blue", sub: "" },
+        note: "Una volta aperto, va in frigo e consumato in pochi giorni."
+    },
+    {
+        category: "latticini",
+        name: "Yogurt",
+        emoji: "🍶",
+        frigoClosed: { text: "2–3 settimane", level: "green", sub: "Controllare la scadenza" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "Coprire con pellicola" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "1–2 mesi", level: "blue", sub: "Cambia consistenza" },
+        note: "Spesso buono anche qualche giorno dopo la scadenza. Verificare odore e gusto."
+    },
+    {
+        category: "latticini",
+        name: "Mozzarella fresca",
+        emoji: "🧀",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "Nel suo liquido" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "In acqua, coperta" },
+        ambient: { text: "Poche ore", level: "red", sub: "" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "Perde consistenza" },
+        note: "Conservare immersa nel liquido. Se diventa viscida, scartare."
+    },
+    {
+        category: "latticini",
+        name: "Formaggio stagionato",
+        emoji: "🧀",
+        frigoClosed: { text: "1–2 mesi", level: "green", sub: "Es. Parmigiano, Pecorino" },
+        frigoOpen: { text: "3–4 settimane", level: "green", sub: "In carta per formaggi" },
+        ambient: { text: "Alcune ore", level: "yellow", sub: "Se fresco" },
+        freezer: { text: "6–8 mesi", level: "blue", sub: "Grattugiato meglio" },
+        note: "Avvolgere in carta alimentare, poi pellicola. Muffa superficiale: toglierla, il resto è commestibile."
+    },
+    {
+        category: "latticini",
+        name: "Formaggio fresco / spalmabile",
+        emoji: "🧀",
+        frigoClosed: { text: "1–2 settimane", level: "yellow", sub: "Controllare la scadenza" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "Chiudere bene" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "" },
+        note: "Ricotta, stracchino, robiola. Molto deperibili, verificare sempre."
+    },
+    {
+        category: "latticini",
+        name: "Burro",
+        emoji: "🧈",
+        frigoClosed: { text: "1–3 mesi", level: "green", sub: "" },
+        frigoOpen: { text: "1 mese", level: "green", sub: "Ben coperto" },
+        ambient: { text: "1–2 giorni", level: "yellow", sub: "Diventa rancido" },
+        freezer: { text: "6–9 mesi", level: "blue", sub: "" },
+        note: "Assorbe facilmente gli odori: tenere in contenitore chiuso."
+    },
+    {
+        category: "latticini",
+        name: "Panna fresca",
+        emoji: "🥛",
+        frigoClosed: { text: "Fino a scadenza", level: "yellow", sub: "5–7 giorni" },
+        frigoOpen: { text: "3–4 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2 mesi", level: "blue", sub: "Solo per cottura" },
+        note: "Dopo il congelamento non è più adatta per montare."
+    },
+
+    // === CARNE ===
+    {
+        category: "carne",
+        categoryLabel: "🥩 Carne",
+        name: "Pollo crudo",
+        emoji: "🍗",
+        frigoClosed: { text: "1–2 giorni", level: "red", sub: "0–4 °C" },
+        frigoOpen: { text: "1 giorno", level: "red", sub: "In contenitore chiuso" },
+        ambient: { text: "1 ora max", level: "red", sub: "⚠️ Rischio Salmonella" },
+        freezer: { text: "9–12 mesi", level: "blue", sub: "Intero o a pezzi" },
+        note: "Crudo. Mai lavare sotto l'acqua (spruzza batteri). Scongelare in frigo."
+    },
+    {
+        category: "carne",
+        name: "Manzo / Vitello",
+        emoji: "🥩",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "Bistecche, arrosti" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "6–12 mesi", level: "blue", sub: "" },
+        note: "Crudo. Carne macinata: max 1–2 giorni in frigo. Congelare subito se non si usa."
+    },
+    {
+        category: "carne",
+        name: "Carne macinata",
+        emoji: "🍖",
+        frigoClosed: { text: "1–2 giorni", level: "red", sub: "Molto deperibile" },
+        frigoOpen: { text: "1 giorno", level: "red", sub: "" },
+        ambient: { text: "1 ora max", level: "red", sub: "" },
+        freezer: { text: "3–4 mesi", level: "blue", sub: "" },
+        note: "Cruda. Congelare il giorno stesso dell'acquisto se non si usa subito."
+    },
+    {
+        category: "carne",
+        name: "Maiale",
+        emoji: "🥓",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "4–6 mesi", level: "blue", sub: "" },
+        note: "Crudo. Cuocere sempre a fondo. Salsicce fresche: max 2 giorni in frigo."
+    },
+    {
+        category: "carne",
+        name: "Affettati / Salumi",
+        emoji: "🥓",
+        frigoClosed: { text: "1–2 settimane", level: "yellow", sub: "Confezionati sottovuoto" },
+        frigoOpen: { text: "3–5 giorni", level: "red", sub: "Richiudere bene" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "1–2 mesi", level: "blue", sub: "Perde qualità" },
+        note: "Crudi/stagionati. Al banco: consumare entro 3 giorni. Il prosciutto crudo stagionato dura di più."
+    },
+    {
+        category: "carne",
+        name: "Pollo / Carne cotta",
+        emoji: "🍗",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–6 mesi", level: "blue", sub: "" },
+        note: "Cotta. Riporre in frigo entro 2 ore dalla cottura. Riscaldare a 75 °C."
+    },
+
+    // === PESCE ===
+    {
+        category: "pesce",
+        categoryLabel: "🐟 Pesce",
+        name: "Pesce fresco",
+        emoji: "🐟",
+        frigoClosed: { text: "1–2 giorni", level: "red", sub: "0–2 °C" },
+        frigoOpen: { text: "1 giorno", level: "red", sub: "Coperto, su ghiaccio" },
+        ambient: { text: "1 ora max", level: "red", sub: "⚠️ Molto deperibile" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Crudo. Conservare nella parte più fredda del frigo. Abbattere a -20 °C per 24h se consumato crudo."
+    },
+    {
+        category: "pesce",
+        name: "Pesce affumicato",
+        emoji: "🐠",
+        frigoClosed: { text: "2 settimane", level: "yellow", sub: "Sottovuoto" },
+        frigoOpen: { text: "3–5 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "" },
+        note: "Salmone affumicato: verificare scadenza. Una volta aperto, consumare rapidamente."
+    },
+    {
+        category: "pesce",
+        name: "Tonno in scatola",
+        emoji: "🥫",
+        frigoClosed: { text: "Anni", level: "green", sub: "Fino a scadenza" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "Travasare in vetro!" },
+        ambient: { text: "Fino a scadenza", level: "green", sub: "Se chiuso" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Una volta aperto, NON lasciare nella lattina: travasare in contenitore di vetro."
+    },
+    {
+        category: "pesce",
+        name: "Crostacei / Molluschi",
+        emoji: "🦐",
+        frigoClosed: { text: "1 giorno", level: "red", sub: "Consumare subito" },
+        frigoOpen: { text: "1 giorno", level: "red", sub: "" },
+        ambient: { text: "1 ora max", level: "red", sub: "⚠️ Alto rischio" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Crudi. Estremamente deperibili. Cozze e vongole vive: consumare il giorno stesso."
+    },
+    {
+        category: "pesce",
+        name: "Pesce cotto",
+        emoji: "🍣",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "" },
+        note: "Cotto. Riporre in frigo entro 2 ore dalla cottura. Riscaldare a 75 °C."
+    },
+    {
+        category: "pesce",
+        name: "Crostacei / Molluschi cotti",
+        emoji: "🦐",
+        frigoClosed: { text: "2–3 giorni", level: "red", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "1–2 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "⚠️ Molto deperibili" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "" },
+        note: "Cotti. Refrigerare subito. Non riscaldare più di una volta."
+    },
+
+    // === UOVA ===
+    {
+        category: "uova",
+        categoryLabel: "🥚 Uova",
+        name: "Uova intere (guscio)",
+        emoji: "🥚",
+        frigoClosed: { text: "3–5 settimane", level: "green", sub: "Dalla data di acquisto" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "7–10 giorni", level: "yellow", sub: "In luogo fresco" },
+        freezer: { text: "Non con guscio", level: "gray", sub: "Sgusciate: 12 mesi" },
+        note: "Test freschezza: se galleggia in acqua, non è più fresca. In Italia non sono refrigerate al supermercato, ma in frigo durano di più."
+    },
+    {
+        category: "uova",
+        name: "Uova sode",
+        emoji: "🥚",
+        frigoClosed: { text: "1 settimana", level: "yellow", sub: "Con guscio" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Sgusciate, coperte" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "Diventa gommoso" },
+        note: "Meglio conservare con il guscio. Sgusciate: coprire e consumare presto."
+    },
+
+    // === VERDURE CRUDE ===
+    {
+        category: "verdure-crude",
+        categoryLabel: "🥬 Verdure crude",
+        name: "Insalata / Verdure a foglia",
+        emoji: "🥬",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "In busta chiusa" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Avvolta in carta" },
+        ambient: { text: "Poche ore", level: "red", sub: "Appassisce" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "" },
+        note: "Cruda. Lavare solo prima dell'uso. Avvolgere in carta assorbente umida."
+    },
+    {
+        category: "verdure-crude",
+        name: "Pomodori crudi",
+        emoji: "🍅",
+        frigoClosed: { text: "1–2 settimane", level: "green", sub: "Se maturi" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "5–7 giorni", level: "yellow", sub: "Se non ancora maturi" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "Solo per cottura" },
+        note: "Crudi. Quelli acerbi maturano meglio fuori dal frigo. Il freddo riduce il sapore."
+    },
+    {
+        category: "verdure-crude",
+        name: "Carote / Sedano crudi",
+        emoji: "🥕",
+        frigoClosed: { text: "2–4 settimane", level: "green", sub: "" },
+        frigoOpen: { text: "1–2 settimane", level: "yellow", sub: "In contenitore con acqua" },
+        ambient: { text: "3–5 giorni", level: "yellow", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Sbollentare prima" },
+        note: "Crude. Le carote durano più a lungo rimosse dalle foglie verdi."
+    },
+    {
+        category: "verdure-crude",
+        name: "Patate crude",
+        emoji: "🥔",
+        frigoClosed: { text: "Non consigliato", level: "gray", sub: "Zucchero aumenta" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–3 mesi", level: "green", sub: "Luogo buio e fresco" },
+        freezer: { text: "Non crude", level: "gray", sub: "Solo cotte" },
+        note: "Crude. Al buio, asciutte, lontano dalle cipolle. Se germogliano, rimuovere germogli."
+    },
+    {
+        category: "verdure-crude",
+        name: "Cipolle / Aglio",
+        emoji: "🧅",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "Se intere" },
+        frigoOpen: { text: "7–10 giorni", level: "yellow", sub: "Se tagliate" },
+        ambient: { text: "1–2 mesi", level: "green", sub: "Luogo asciutto e buio" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "Tritate" },
+        note: "Crude. NON conservare vicino alle patate. Aglio: dura settimane a temperatura ambiente."
+    },
+    {
+        category: "verdure-crude",
+        name: "Zucchine / Peperoni / Melanzane crude",
+        emoji: "🫑",
+        frigoClosed: { text: "1–2 settimane", level: "yellow", sub: "" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Se tagliati, in pellicola" },
+        ambient: { text: "2–4 giorni", level: "yellow", sub: "" },
+        freezer: { text: "8–12 mesi", level: "blue", sub: "Tagliati, sbollentati" },
+        note: "Crude. Peperoni: durano più in frigo. Melanzane: sensibili al freddo eccessivo."
+    },
+    {
+        category: "verdure-crude",
+        name: "Funghi freschi crudi",
+        emoji: "🍄",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "In sacchetto di carta" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "" },
+        ambient: { text: "1 giorno", level: "red", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Sbollentare prima" },
+        note: "Crudi. Mai in plastica: marciscono. Usare sacchetti di carta o strofinacci."
+    },
+    {
+        category: "verdure-crude",
+        name: "Broccoli / Cavolfiore crudi",
+        emoji: "🥦",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "A pezzi, in contenitore" },
+        ambient: { text: "1–2 giorni", level: "red", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Sbollentare prima" },
+        note: "Crudi. Macchie gialle = invecchiamento. Per congelare: sbollentare 3 minuti."
+    },
+    {
+        category: "verdure-crude",
+        name: "Spinaci / Bietole crude",
+        emoji: "🥬",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "In busta/contenitore" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "Poche ore", level: "red", sub: "Appassiscono subito" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Sbollentare prima" },
+        note: "Crude. Molto deperibili. Lavare solo prima dell'uso."
+    },
+    {
+        category: "verdure-crude",
+        name: "Erbe aromatiche fresche",
+        emoji: "🌿",
+        frigoClosed: { text: "5–10 giorni", level: "yellow", sub: "In barattolo con acqua" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Avvolte in carta umida" },
+        ambient: { text: "1–2 giorni", level: "red", sub: "Appassiscono" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "Tritate, in olio/cubetti" },
+        note: "Crude. Basilico, prezzemolo, rosmarino, menta. Basilico soffre il freddo: meglio a temp. ambiente con gambo in acqua."
+    },
+
+    // === VERDURE E PIETANZE COTTE ===
+    {
+        category: "verdure-cotte",
+        categoryLabel: "🍲 Verdure e Pietanze cotte",
+        name: "Verdure cotte (generiche)",
+        emoji: "🥦",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "" },
+        note: "Cotte. In contenitori ermetici. Evitare di riscaldare più volte."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Patate cotte",
+        emoji: "🥔",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Purè o a pezzi" },
+        note: "Cotte. Riporre in frigo entro 2 ore. Il purè si congela bene."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Funghi cotti",
+        emoji: "🍄",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "2–3 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "" },
+        note: "Cotti. Raffreddare rapidamente. I funghi trifolati si congelano bene."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Minestrone / Passato di verdure",
+        emoji: "🥣",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "In porzioni" },
+        note: "Cotto. Congelare in porzioni singole. Riscaldare portando a ebollizione."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Legumi cotti (non in scatola)",
+        emoji: "🫘",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "In contenitore con liquido" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "Ottimi congelati" },
+        note: "Cotti. Si congelano benissimo in porzioni, anche con il loro brodo."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Riso cotto",
+        emoji: "🍚",
+        frigoClosed: { text: "1–2 giorni", level: "red", sub: "⚠️ Bacillus cereus" },
+        frigoOpen: { text: "1 giorno", level: "red", sub: "" },
+        ambient: { text: "1 ora max", level: "red", sub: "⚠️ Rischio tossine" },
+        freezer: { text: "1–2 mesi", level: "blue", sub: "" },
+        note: "Cotto. Raffreddare e refrigerare ENTRO 1 ora. Il riso è a rischio Bacillus cereus."
+    },
+    {
+        category: "verdure-cotte",
+        name: "Pasta cotta (condita)",
+        emoji: "🍝",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "1–2 mesi", level: "blue", sub: "" },
+        note: "Cotta. La pasta al forno si congela molto bene."
+    },
+
+    // === FRUTTA ===
+    {
+        category: "frutta",
+        categoryLabel: "🍎 Frutta",
+        name: "Mele",
+        emoji: "🍎",
+        frigoClosed: { text: "4–6 settimane", level: "green", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "1–2 settimane", level: "yellow", sub: "" },
+        freezer: { text: "8 mesi", level: "blue", sub: "A fette, sbollentate" },
+        note: "Le mele producono etilene: tenere separate da altri frutti."
+    },
+    {
+        category: "frutta",
+        name: "Banane",
+        emoji: "🍌",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "Buccia annerisce, ok dentro" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "3–5 giorni", level: "yellow", sub: "Maturano velocemente" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "Sbucciate, per frullati" },
+        note: "In frigo la buccia diventa nera ma la polpa resta buona."
+    },
+    {
+        category: "frutta",
+        name: "Frutti di bosco",
+        emoji: "🫐",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "Non lavare prima" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "1 giorno", level: "red", sub: "" },
+        freezer: { text: "8–12 mesi", level: "blue", sub: "Ottimi congelati" },
+        note: "Lavare solo prima del consumo. La muffa si diffonde rapidamente."
+    },
+    {
+        category: "frutta",
+        name: "Limoni / Agrumi",
+        emoji: "🍋",
+        frigoClosed: { text: "3–4 settimane", level: "green", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "1–2 settimane", level: "yellow", sub: "" },
+        freezer: { text: "3–4 mesi", level: "blue", sub: "Succo o scorza" },
+        note: "Il succo di limone si può congelare in vaschette per il ghiaccio."
+    },
+    {
+        category: "frutta",
+        name: "Pesche / Albicocche / Susine",
+        emoji: "🍑",
+        frigoClosed: { text: "5–7 giorni", level: "yellow", sub: "Se mature" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–4 giorni", level: "yellow", sub: "Maturano fuori dal frigo" },
+        freezer: { text: "8–12 mesi", level: "blue", sub: "A spicchi, denocciolate" },
+        note: "Se acerbe, lasciar maturare fuori dal frigo. In frigo solo quando mature."
+    },
+    {
+        category: "frutta",
+        name: "Uva",
+        emoji: "🍇",
+        frigoClosed: { text: "1–2 settimane", level: "green", sub: "Non lavare prima" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–3 giorni", level: "yellow", sub: "" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "Ottima congelata" },
+        note: "Lavare solo prima del consumo. Congelata è un ottimo snack."
+    },
+    {
+        category: "frutta",
+        name: "Anguria / Melone",
+        emoji: "🍉",
+        frigoClosed: { text: "1 settimana", level: "yellow", sub: "Intera; 3–5 gg a pezzi" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Coperta con pellicola" },
+        ambient: { text: "1 settimana", level: "yellow", sub: "Se intera" },
+        freezer: { text: "10–12 mesi", level: "blue", sub: "A cubetti, per frullati" },
+        note: "Tagliata: sempre in frigo, coperta. Intera: si conserva bene fuori."
+    },
+
+    // === CONSERVE E BARATTOLI ===
+    {
+        category: "conserve",
+        categoryLabel: "🥫 Conserve e Barattoli",
+        name: "Passata di pomodoro",
+        emoji: "🫙",
+        frigoClosed: { text: "12–18 mesi", level: "green", sub: "Se chiusa" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "In frigo, chiusa" },
+        ambient: { text: "12–18 mesi", level: "green", sub: "Se non aperta" },
+        freezer: { text: "3 mesi", level: "blue", sub: "In contenitore" },
+        note: "Dopo l'apertura: travasare dalla latta. Congelare in porzioni."
+    },
+    {
+        category: "conserve",
+        name: "Legumi in scatola",
+        emoji: "🥫",
+        frigoClosed: { text: "2–5 anni", level: "green", sub: "Controllare scadenza" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "Travasare in vetro" },
+        ambient: { text: "2–5 anni", level: "green", sub: "Se chiusi" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "Scolarti" },
+        note: "Non conservare MAI nel barattolo di latta aperto. Travasare sempre."
+    },
+    {
+        category: "conserve",
+        name: "Sottoli / Sottaceti",
+        emoji: "🫒",
+        frigoClosed: { text: "12+ mesi", level: "green", sub: "Se chiusi" },
+        frigoOpen: { text: "1–2 mesi", level: "green", sub: "Coperti d'olio/aceto" },
+        ambient: { text: "12+ mesi", level: "green", sub: "Se non aperti" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Dopo apertura: assicurarsi che il contenuto sia sempre coperto dal liquido."
+    },
+    {
+        category: "conserve",
+        name: "Marmellata / Confettura",
+        emoji: "🫙",
+        frigoClosed: { text: "12–18 mesi", level: "green", sub: "Se chiusa" },
+        frigoOpen: { text: "1–3 mesi", level: "green", sub: "In frigo" },
+        ambient: { text: "12–18 mesi", level: "green", sub: "Se non aperta" },
+        freezer: { text: "6–12 mesi", level: "blue", sub: "" },
+        note: "Usare sempre cucchiai puliti. Se compare muffa, scartare tutto il vasetto."
+    },
+    {
+        category: "conserve",
+        name: "Pesto (vasetto)",
+        emoji: "🌿",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "Coprire con olio" },
+        ambient: { text: "Se non aperto", level: "green", sub: "" },
+        freezer: { text: "3–4 mesi", level: "blue", sub: "In porzioni" },
+        note: "Dopo l'apertura, aggiungere un filo d'olio in superficie per conservarlo meglio."
+    },
+
+    // === PANE E FORNO ===
+    {
+        category: "pane",
+        categoryLabel: "🍞 Pane e Prodotti da Forno",
+        name: "Pane fresco",
+        emoji: "🍞",
+        frigoClosed: { text: "Non consigliato", level: "gray", sub: "Si secca prima" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–3 giorni", level: "yellow", sub: "In sacchetto di carta" },
+        freezer: { text: "3 mesi", level: "blue", sub: "A fette, ottimo" },
+        note: "Il frigo accelera la retrogradazione dell'amido. Congelare è la scelta migliore."
+    },
+    {
+        category: "pane",
+        name: "Pane in cassetta",
+        emoji: "🍞",
+        frigoClosed: { text: "1–2 settimane", level: "yellow", sub: "Confezionato" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "Richiudere bene" },
+        ambient: { text: "5–7 giorni", level: "yellow", sub: "" },
+        freezer: { text: "3 mesi", level: "blue", sub: "" },
+        note: "Controllare muffa prima dell'uso. Se una fetta ha muffa, scartare tutto."
+    },
+    {
+        category: "pane",
+        name: "Dolci / Torte",
+        emoji: "🎂",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "Con crema: 2 giorni" },
+        frigoOpen: { text: "1–2 giorni", level: "red", sub: "" },
+        ambient: { text: "1–2 giorni", level: "yellow", sub: "Se senza crema" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "Senza glassa" },
+        note: "Torte con panna/crema: sempre in frigo. Senza: temperatura ambiente."
+    },
+    {
+        category: "pane",
+        name: "Biscotti",
+        emoji: "🍪",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–3 settimane", level: "green", sub: "In contenitore chiuso" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Conservare in contenitore ermetico. Lontano dall'umidità."
+    },
+
+    // === SALSE E CONDIMENTI ===
+    {
+        category: "salse",
+        categoryLabel: "🫙 Salse e Condimenti",
+        name: "Maionese",
+        emoji: "🫙",
+        frigoClosed: { text: "2–3 mesi", level: "green", sub: "Industriale, dopo scadenza" },
+        frigoOpen: { text: "1–2 mesi", level: "green", sub: "In frigo" },
+        ambient: { text: "No se aperta", level: "red", sub: "" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "Si separa" },
+        note: "Maionese fatta in casa: max 3–4 giorni in frigo. ⚠️ Rischio Salmonella."
+    },
+    {
+        category: "salse",
+        name: "Ketchup / Senape",
+        emoji: "🍅",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "" },
+        frigoOpen: { text: "6 mesi", level: "green", sub: "In frigo" },
+        ambient: { text: "1 mese", level: "yellow", sub: "Se aperto" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Lunga conservazione grazie all'acidità. Meglio in frigo dopo l'apertura."
+    },
+    {
+        category: "salse",
+        name: "Olio d'oliva",
+        emoji: "🫒",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "12–18 mesi", level: "green", sub: "Al buio, ben chiuso" },
+        freezer: { text: "Non necessario", level: "gray", sub: "Si solidifica" },
+        note: "Lontano da luce e calore. Non vicino ai fornelli. Chiudere sempre bene."
+    },
+    {
+        category: "salse",
+        name: "Aceto",
+        emoji: "🫙",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Praticamente illimitato", level: "green", sub: "" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "L'aceto è un conservante naturale. Non scade praticamente mai."
+    },
+    {
+        category: "salse",
+        name: "Salsa di soia",
+        emoji: "🫙",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "Se chiusa" },
+        frigoOpen: { text: "6+ mesi", level: "green", sub: "In frigo, mantiene qualità" },
+        ambient: { text: "6+ mesi", level: "green", sub: "Anche aperta" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Alta concentrazione di sale la preserva a lungo. In frigo mantiene meglio il sapore."
+    },
+    {
+        category: "salse",
+        name: "Sugo pronto (vasetto)",
+        emoji: "🍝",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "" },
+        frigoOpen: { text: "4–5 giorni", level: "yellow", sub: "In frigo" },
+        ambient: { text: "Fino a scadenza", level: "green", sub: "Se chiuso" },
+        freezer: { text: "3 mesi", level: "blue", sub: "" },
+        note: "Dopo apertura, in frigo e consumare entro pochi giorni."
+    },
+
+    // === AVANZI ===
+    {
+        category: "avanzi",
+        categoryLabel: "🍕 Avanzi e Piatti misti",
+        name: "Pizza avanzata",
+        emoji: "🍕",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Poche ore", level: "red", sub: "" },
+        freezer: { text: "1–2 mesi", level: "blue", sub: "" },
+        note: "Riscaldare in padella con coperchio per mantenere croccantezza."
+    },
+    {
+        category: "avanzi",
+        name: "Ragù / Sughi di carne",
+        emoji: "🫕",
+        frigoClosed: { text: "4–5 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "3–4 mesi", level: "blue", sub: "Ottimi congelati" },
+        note: "Cotti. Il ragù e i sughi si congelano benissimo in porzioni."
+    },
+    {
+        category: "avanzi",
+        name: "Lasagne / Timballi cotti",
+        emoji: "🍝",
+        frigoClosed: { text: "3–5 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "2–3 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "A porzioni" },
+        note: "Cotti. Si congelano molto bene a porzioni. Riscaldare a 75 °C al cuore."
+    },
+    {
+        category: "avanzi",
+        name: "Frittata / Omelette",
+        emoji: "🍳",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "2 giorni", level: "red", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "" },
+        note: "Cotta. Buona anche fredda dal frigo. Si congela bene a fette."
+    },
+    {
+        category: "avanzi",
+        name: "Brodo di carne / vegetale",
+        emoji: "🥣",
+        frigoClosed: { text: "4–5 giorni", level: "yellow", sub: "" },
+        frigoOpen: { text: "3–4 giorni", level: "yellow", sub: "" },
+        ambient: { text: "2 ore max", level: "red", sub: "" },
+        freezer: { text: "4–6 mesi", level: "blue", sub: "In porzioni o cubetti" },
+        note: "Cotto. Congelare in vaschette per ghiaccio per dosi singole. Portare a bollore al riutilizzo."
+    },
+
+    // === BEVANDE ===
+    {
+        category: "bevande",
+        categoryLabel: "🥤 Bevande",
+        name: "Succo di frutta (cartone)",
+        emoji: "🧃",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "In frigo" },
+        ambient: { text: "Fino a scadenza", level: "green", sub: "Se chiuso" },
+        freezer: { text: "8–12 mesi", level: "blue", sub: "" },
+        note: "Dopo l'apertura, sempre in frigo. Se pastorizzato fresco: più breve."
+    },
+    {
+        category: "bevande",
+        name: "Spremuta fresca",
+        emoji: "🍊",
+        frigoClosed: { text: "2–3 giorni", level: "red", sub: "" },
+        frigoOpen: { text: "1–2 giorni", level: "red", sub: "" },
+        ambient: { text: "Poche ore", level: "red", sub: "Perde vitamine" },
+        freezer: { text: "3–4 mesi", level: "blue", sub: "" },
+        note: "Le vitamine si degradano velocemente. Bere entro 24h per il massimo beneficio."
+    },
+    {
+        category: "bevande",
+        name: "Vino aperto",
+        emoji: "🍷",
+        frigoClosed: { text: "—", level: "gray", sub: "" },
+        frigoOpen: { text: "3–5 giorni", level: "yellow", sub: "Rosso e bianco" },
+        ambient: { text: "1–2 giorni", level: "red", sub: "" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "" },
+        note: "Richiudere con tappo. Bianco/rosé: in frigo. Rosso: frigo rallenta l'ossidazione."
+    },
+    {
+        category: "bevande",
+        name: "Birra",
+        emoji: "🍺",
+        frigoClosed: { text: "6–9 mesi", level: "green", sub: "Artigianale: meno" },
+        frigoOpen: { text: "Consumare subito", level: "red", sub: "Perde gas" },
+        ambient: { text: "6–9 mesi", level: "green", sub: "Se chiusa" },
+        freezer: { text: "Non consigliato", level: "gray", sub: "Esplode!" },
+        note: "NON congelare: la bottiglia può esplodere. Artigianale non pastorizzata: in frigo."
+    },
+    {
+        category: "bevande",
+        name: "Latte vegetale",
+        emoji: "🥛",
+        frigoClosed: { text: "Fino a scadenza", level: "green", sub: "Se UHT, chiuso" },
+        frigoOpen: { text: "5–7 giorni", level: "yellow", sub: "In frigo" },
+        ambient: { text: "Fino a scadenza", level: "green", sub: "Se UHT chiuso" },
+        freezer: { text: "3 mesi", level: "blue", sub: "Può separarsi" },
+        note: "Agitare bene dopo il congelamento. Fresco (non UHT): trattare come latte fresco."
+    },
+    {
+        category: "bevande",
+        name: "Caffè preparato",
+        emoji: "☕",
+        frigoClosed: { text: "3–4 giorni", level: "yellow", sub: "In contenitore chiuso" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "12 ore", level: "yellow", sub: "Perde aroma" },
+        freezer: { text: "2 mesi", level: "blue", sub: "In cubetti ghiaccio" },
+        note: "Per caffè freddo: congelare in vaschetta per ghiaccio. I fondi sono compostabili."
+    },
+
+    // === SURGELATI ===
+    {
+        category: "surgelati",
+        categoryLabel: "🧊 Surgelati (acquistati già surgelati)",
+        name: "Verdure surgelate",
+        emoji: "🥦",
+        frigoClosed: { text: "—", level: "gray", sub: "Scongelate: 1–2 gg" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Cuocere subito", level: "red", sub: "Se scongelate" },
+        freezer: { text: "8–12 mesi", level: "blue", sub: "A -18 °C" },
+        note: "Cuocere direttamente da congelate. Mai ricongelare dopo scongelamento."
+    },
+    {
+        category: "surgelati",
+        name: "Pesce surgelato",
+        emoji: "🐟",
+        frigoClosed: { text: "—", level: "gray", sub: "Scongelato: 1 giorno" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Non scongelare fuori", level: "red", sub: "⚠️" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Scongelare SEMPRE in frigo, mai a temperatura ambiente. Non ricongelare."
+    },
+    {
+        category: "surgelati",
+        name: "Pizza surgelata",
+        emoji: "🍕",
+        frigoClosed: { text: "—", level: "gray", sub: "Non scongelare" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Cuocere da congelata", level: "yellow", sub: "" },
+        freezer: { text: "12–18 mesi", level: "blue", sub: "" },
+        note: "Infornare direttamente da congelata. Non scongelare prima."
+    },
+    {
+        category: "surgelati",
+        name: "Gelato",
+        emoji: "🍦",
+        frigoClosed: { text: "—", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Si scioglie", level: "red", sub: "Non ricongelare!" },
+        freezer: { text: "2–3 mesi", level: "blue", sub: "Dopo apertura" },
+        note: "Se si è sciolto e ricongelato, la consistenza peggiora e i batteri possono proliferare."
+    },
+    {
+        category: "surgelati",
+        name: "Preparati surgelati (lasagne, ecc.)",
+        emoji: "🫕",
+        frigoClosed: { text: "—", level: "gray", sub: "Scongelati: 1 giorno" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Cuocere da congelati", level: "yellow", sub: "" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Seguire le istruzioni sulla confezione. Non ricongelare dopo scongelamento."
+    },
+    {
+        category: "surgelati",
+        name: "Pane / Prodotti da forno surgelati",
+        emoji: "🥐",
+        frigoClosed: { text: "—", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Scongelare a temp. amb.", level: "green", sub: "20–30 min" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "" },
+        note: "Croissant surgelati: scongelare e infornare. Pane: scongelare a temperatura ambiente."
+    },
+
+    // === DISPENSA (prodotti secchi / lunga conservazione) ===
+    {
+        category: "dispensa",
+        categoryLabel: "🏺 Dispensa (secchi e lunga conservazione)",
+        name: "Pasta secca",
+        emoji: "🍝",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "2–3 anni", level: "green", sub: "Luogo asciutto" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secca. Conservare in luogo fresco e asciutto. Chiudere bene la confezione dopo l'apertura."
+    },
+    {
+        category: "dispensa",
+        name: "Riso / Cereali secchi",
+        emoji: "🌾",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "1–2 anni", level: "green", sub: "In contenitore chiuso" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secchi. Farro, orzo, cous cous, quinoa. Riso integrale: 6 mesi (irrancidisce prima)."
+    },
+    {
+        category: "dispensa",
+        name: "Farina",
+        emoji: "🌾",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "Ma allunga la vita" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "6–12 mesi", level: "green", sub: "In contenitore ermetico" },
+        freezer: { text: "1–2 anni", level: "blue", sub: "" },
+        note: "Secca. Farina integrale: max 3–6 mesi (gli oli irrancidiscono). Controllare tarme."
+    },
+    {
+        category: "dispensa",
+        name: "Frutta secca a guscio",
+        emoji: "🥜",
+        frigoClosed: { text: "6 mesi", level: "green", sub: "Allunga la freschezza" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "1–3 mesi", level: "yellow", sub: "In contenitore chiuso" },
+        freezer: { text: "12 mesi", level: "blue", sub: "" },
+        note: "Secca. Noci, mandorle, nocciole, pistacchi. Se sa di rancido, scartare."
+    },
+    {
+        category: "dispensa",
+        name: "Frutta disidratata",
+        emoji: "🍇",
+        frigoClosed: { text: "6–12 mesi", level: "green", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "6 mesi", level: "green", sub: "In contenitore chiuso" },
+        freezer: { text: "12 mesi", level: "blue", sub: "" },
+        note: "Secca. Uvetta, datteri, fichi secchi, albicocche secche. Controllare muffa."
+    },
+    {
+        category: "dispensa",
+        name: "Miele",
+        emoji: "🍯",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Praticamente illimitato", level: "green", sub: "Anni" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Non scade mai se conservato chiuso. Se cristallizza, scaldare a bagnomaria. Mai dare ai neonati sotto 1 anno."
+    },
+    {
+        category: "dispensa",
+        name: "Cioccolato",
+        emoji: "🍫",
+        frigoClosed: { text: "Non consigliato", level: "gray", sub: "Assorbe odori" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "6–12 mesi", level: "green", sub: "Fondente dura di più" },
+        freezer: { text: "12 mesi", level: "blue", sub: "" },
+        note: "Secco. Luogo fresco (15–18 °C), al buio. La patina bianca è burro di cacao: è commestibile."
+    },
+    {
+        category: "dispensa",
+        name: "Lievito fresco",
+        emoji: "🧫",
+        frigoClosed: { text: "2–3 settimane", level: "yellow", sub: "Controllare scadenza" },
+        frigoOpen: { text: "3–5 giorni", level: "red", sub: "Avvolto in pellicola" },
+        ambient: { text: "Poche ore", level: "red", sub: "" },
+        freezer: { text: "3 mesi", level: "blue", sub: "Sbriciolato" },
+        note: "Fresco. Sempre in frigo. Per congelare: sbriciolarlo e usarlo direttamente da congelato."
+    },
+    {
+        category: "dispensa",
+        name: "Lievito secco",
+        emoji: "🧫",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "4–6 mesi", level: "yellow", sub: "In frigo dopo apertura" },
+        ambient: { text: "1–2 anni", level: "green", sub: "Se chiuso" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secco. Dopo l'apertura, chiudere bene e tenere in frigo. Verificare con acqua tiepida + zucchero."
+    },
+    {
+        category: "dispensa",
+        name: "Tofu",
+        emoji: "🧈",
+        frigoClosed: { text: "Fino a scadenza", level: "yellow", sub: "Sottovuoto" },
+        frigoOpen: { text: "3–5 giorni", level: "red", sub: "In acqua, cambiare ogni giorno" },
+        ambient: { text: "Non lasciare fuori", level: "red", sub: "" },
+        freezer: { text: "3–5 mesi", level: "blue", sub: "Cambia consistenza" },
+        note: "Dopo apertura: immergere in acqua fredda e cambiare l'acqua ogni giorno."
+    },
+    {
+        category: "dispensa",
+        name: "Spezie secche",
+        emoji: "🌶️",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "1–3 anni", level: "green", sub: "In barattoli chiusi" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secche. Perdono aroma col tempo ma non diventano pericolose. Macinate: meno duratura."
+    },
+    {
+        category: "dispensa",
+        name: "Zucchero",
+        emoji: "🧂",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Illimitato", level: "green", sub: "In contenitore chiuso" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secco. Non scade. Tenere lontano dall'umidità. Lo zucchero di canna può indurirsi."
+    },
+    {
+        category: "dispensa",
+        name: "Sale",
+        emoji: "🧂",
+        frigoClosed: { text: "Non necessario", level: "gray", sub: "" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Illimitato", level: "green", sub: "" },
+        freezer: { text: "Non necessario", level: "gray", sub: "" },
+        note: "Secco. Non scade mai. Conservante naturale per eccellenza."
+    },
+    {
+        category: "dispensa",
+        name: "Caffè (grani / macinato)",
+        emoji: "☕",
+        frigoClosed: { text: "Non consigliato", level: "gray", sub: "Assorbe umidità" },
+        frigoOpen: { text: "—", level: "gray", sub: "" },
+        ambient: { text: "Grani: 1 mese", level: "yellow", sub: "Macinato: 2 settimane" },
+        freezer: { text: "3–6 mesi", level: "blue", sub: "In grani, sottovuoto" },
+        note: "Secco. Perde aroma rapidamente dopo apertura. In grani dura più a lungo."
+    }
+];
+
+// Derive badge from note or name
+function getBadge(item) {
+    const n = (item.note + ' ' + item.name).toLowerCase();
+    if (n.includes('stagionat')) return '<span class="badge badge-stagionato">stagionato</span>';
+    if (n.includes('secco') || n.includes('secca') || n.includes('secchi') || n.includes('secche') || item.category === 'dispensa') return '<span class="badge badge-secco">secco</span>';
+    if (n.startsWith('cott') || n.includes('cott') || item.category === 'verdure-cotte' || item.category === 'avanzi') return '<span class="badge badge-cotto">cotto</span>';
+    if (n.startsWith('crud') || n.includes('crud') || item.category === 'verdure-crude') return '<span class="badge badge-crudo">crudo</span>';
+    return '';
+}
+
+// Danger indicator for high-risk foods
+const dangerFoods = [
+    'pollo crudo', 'carne macinata', 'pesce fresco', 'crostacei / molluschi',
+    'riso cotto', 'maionese', 'crostacei / molluschi cotti'
+];
+
+function getDanger(item) {
+    const name = item.name.toLowerCase();
+    if (dangerFoods.some(d => name.includes(d) || d.includes(name))) {
+        return '<span class="danger-indicator" title="Alto rischio: prestare particolare attenzione">☠️</span>';
+    }
+    return '';
+}
+
+// Render
+function renderTable(data) {
+    const tbody = document.getElementById('tableBody');
+    const noResults = document.getElementById('noResults');
+    const stats = document.getElementById('stats');
+
+    tbody.innerHTML = '';
+
+    let currentCategory = '';
+    let visibleCount = 0;
+
+    data.forEach(item => {
+        // Category header row
+        if (item.categoryLabel && item.category !== currentCategory) {
+            currentCategory = item.category;
+            const catRow = document.createElement('tr');
+            catRow.className = 'category-row';
+            catRow.setAttribute('data-category', item.category);
+            catRow.innerHTML = `<td colspan="6">${item.categoryLabel}</td>`;
+            tbody.appendChild(catRow);
+        }
+
+        const badge = getBadge(item);
+        const danger = getDanger(item);
+
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-category', item.category);
+        tr.setAttribute('data-name', item.name.toLowerCase());
+
+        tr.innerHTML = `
+            <td class="food-name"><span class="food-emoji">${item.emoji}</span>${item.name}${badge}${danger}</td>
+            <td data-label="🧊 Frigo (sigillato)">${renderDuration(item.frigoClosed)}</td>
+            <td data-label="🔓 Frigo (conf. aperta)">${renderDuration(item.frigoOpen)}</td>
+            <td data-label="🌡️ Temp. ambiente">${renderDuration(item.ambient)}</td>
+            <td data-label="❄️ Congelatore">${renderDuration(item.freezer)}</td>
+            <td data-label="📝 Note" class="note">${item.note}</td>
+        `;
+
+        tbody.appendChild(tr);
+        visibleCount++;
+    });
+
+    if (visibleCount === 0) {
+        noResults.style.display = 'block';
+        stats.textContent = '';
+    } else {
+        noResults.style.display = 'none';
+        stats.textContent = `Visualizzati ${visibleCount} alimenti`;
+    }
+}
+
+function renderDuration(d) {
+    if (!d || d.text === '—') return '<span class="duration gray">—</span>';
+    let html = `<span class="duration ${d.level}">${d.text}</span>`;
+    if (d.sub) html += `<span class="sub-info">${d.sub}</span>`;
+    return html;
+}
+
+// Filter
+let activeCategory = 'all';
+let searchQuery = '';
+
+function filterData() {
+    let filtered = foodData;
+
+    if (activeCategory !== 'all') {
+        filtered = filtered.filter(item => item.category === activeCategory);
+    }
+
+    if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(item =>
+            item.name.toLowerCase().includes(q) ||
+            item.note.toLowerCase().includes(q) ||
+            item.category.toLowerCase().includes(q)
+        );
+    }
+
+    // Add category labels back
+    let lastCat = '';
+    filtered = filtered.map(item => {
+        if (item.category !== lastCat) {
+            lastCat = item.category;
+            const original = foodData.find(f => f.category === item.category && f.categoryLabel);
+            if (original) {
+                return { ...item, categoryLabel: original.categoryLabel };
+            }
+        }
+        return { ...item, categoryLabel: null };
+    });
+
+    renderTable(filtered);
+}
+
+// Event listeners
+document.getElementById('searchInput').addEventListener('input', function(e) {
+    searchQuery = e.target.value;
+    filterData();
+});
+
+document.getElementById('filterButtons').addEventListener('click', function(e) {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = btn.dataset.category;
+    filterData();
+
+    // Scrolla in alto fino alla tabella dopo il filtro
+    document.getElementById('stats').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+// Init
+filterData();
+</script>
+
+</body>
+</html>
